@@ -8,8 +8,10 @@ There's is a example script using dmenu for selecting old pastes in the
 ./scripts directory.
 
 Regular dmenu;
+
 ![screenshot](http://github.com/trapd00r/clipbored/raw/master/screenshot.png)
 dmenu with vertical patch / fmenu;
+
 ![screenshot-v](http://github.com/trapd00r/clipbored/raw/master/screenshot-v.png)
 
 License
