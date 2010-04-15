@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+# dmenuclip - Really nasty dmenu launcher to be used in combination with
+# clipbored
+use strict;
+my $xsels = "$ENV{HOME}/.config/clipbored/clips";
+my $f     = '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
+my $dmenu = 'dmenu -i -b -nb \#1c1c1c -nf \#d7005f -sb \#252525';
+
+# this rocks! :)
+system("printf \"\$(\\cat $xsels|$dmenu -fn $f -p xsel)\"|xclip -i -l 0|xclip -o");
