@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use strict;
+# dmenurl - pick and choose url's in the xsel file
+
+my $xsels = "$ENV{HOME}/.config/clipbored/clips";
+my $dmenu = 'fmenu -b -l 10';
+open(CLIPS, "<", $xsels) or die "Cant open $xsels for reading: $!";
+my @allClips = <CLIPS>;
+close CLIPS;
+
+my @urls;
+foreach my $clip(@allClips) {
+  push(@urls, $clip) if $clip =~ /^(http:|www\.)/;
+}
+my $urlsToPrint = join('\n', @urls);
+
+my $xclipper = `which xclip` || `which xsel` || undef;
+die "No xsel or xclip in $ENV{PATH}" if !$xclipper;
+chomp($xclipper);
+
+if($xclipper =~ /xclip/) {
+  $xclipper = "$xclipper -i -l 0|$xclipper -o";
+}
+else {
+    $xclipper = "$xclipper -i|$xclipper -o"; 
+}
+
+system("printf \"$urlsToPrint\"|$dmenu -p url|$xclipper");
