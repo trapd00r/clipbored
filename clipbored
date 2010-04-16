@@ -5,7 +5,7 @@ use strict;
 use Proc::Daemon;
 #use Data::Dumper;
 
-my $xsel = "$ENV{'HOME'}/.config/dmenuclip/xsel";
+my $xsel = "$ENV{'HOME'}/.config/clipbored/clips";
 
 sub syncIt {
   print "Daemonizing...\n";
