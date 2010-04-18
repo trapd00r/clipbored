@@ -12,7 +12,7 @@ my @urls;
 foreach my $clip(@allClips) {
   push(@urls, $clip) if $clip =~ /^(http:|www\.)/;
 }
-my $urlsToPrint = join('\n', @urls);
+my $urlsToPrint = join('\n', reverse(@urls));
 
 my $xclipper = `which xclip` || `which xsel` || undef;
 die "No xsel or xclip in $ENV{PATH}" if !$xclipper;
