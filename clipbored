@@ -2,14 +2,14 @@
 use strict;
 # clipbored - daemon that saves all X selections for use with dmenuclip
 # Copyright (C) 2010 Magnus Woldrich <trapd00r@trapd00r.se>
-use Proc::Daemon;
+use App::Daemon qw(daemonize);
 #use Data::Dumper;
 
 my $xsel = "$ENV{'HOME'}/.config/clipbored/clips";
 
 sub syncIt {
   print "Daemonizing...\n";
-  Proc::Daemon::Init;
+  daemonize();
   while(1) {
     open(XSEL,"<", $xsel) or die "Cant open $xsel for reading: $!";
     my @lines = <XSEL>;
