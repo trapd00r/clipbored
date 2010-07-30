@@ -2,7 +2,7 @@
 # dmenuclip - Really nasty dmenu launcher to be used in combination with
 # clipbored
 use strict;
-my $xsels = "$ENV{HOME}/.config/clipbored/clips";
+my $xsels = "$ENV{XDG_DATA_HOME}/clipbored/clips";
 my $f     = '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
 my $dmenu = 'dmenu -i -b -nb \#1c1c1c -nf \#d7005f -sb \#252525';
 
