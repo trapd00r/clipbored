@@ -1,25 +1,36 @@
 #!/usr/bin/perl
 use strict;
-# clipbored - daemon that saves all X selections for use with dmenuclip
-# Copyright (C) 2010 Magnus Woldrich <trapd00r@trapd00r.se>
-#use Data::Dumper;
+use Data::Dumper;
+use Getopt::Long;
+use Pod::Usage;
 
 my $xsel_log = "$ENV{XDG_DATA_HOME}/clipbored/clips";
 my $pidfile  = '/tmp/clipbored.pid';
-
 
 if(!-f $xsel_log) {
   open(my $fh, '>', $xsel_log) or die($!);
   close($fh);
 }
 
+our($opt_no_daemon) = undef;
+GetOptions(
+ 'no-daemon' => \$opt_no_daemon,
+ 'kill'      => \&killkid,
+ 'help'      => sub {pod2usage(-verbose => 1) and exit(0)},
+ 'man'       => sub {pod2usage(-verbose => 3) and exit(0)},
+);
+
+if(-f $pidfile) {
+  print "clipbored is already running\n";
+  exit(1);
+}
+
 sync_cb();
 
 sub sync_cb {
-  daemonize();
+  daemonize() unless(defined($opt_no_daemon));
   while(1) {
     chomp(my $current_selection = `/usr/bin/xsel -o`);
-    print "$current_selection\n";
     if(defined($current_selection)) {
       open(my $r_xsel, '<', $xsel_log) or die("Cant open $xsel_log: $!");
       chomp(my @selections = <$r_xsel>);
@@ -33,12 +44,27 @@ sub sync_cb {
         open(my $a_xsel, '>>', $xsel_log) or die("Cant open $xsel_log: $!");
         print $a_xsel $current_selection, "\n";
         close($a_xsel);
+        print $current_selection, "\n" if(defined($opt_no_daemon));
       }
     }
     else {
     }
     sleep 2;
   }
+}
+
+sub killkid {
+  open(my $fh, '<', $pidfile) or print "clipbored is not running\n" and exit(1);
+  my $target = <$fh>;
+  close($fh);
+
+  if(kill(9, $target)) {
+    print "clipbored with PID $target terminated\n";
+  }
+  else {
+    print "Could not kill $target: $!";
+  }
+  exit(0);
 }
 
 sub daemonize {
@@ -65,3 +91,61 @@ sub daemonize {
     open(STDIN,  '<', '/dev/null');
   }
 }
+
+
+=pod
+
+=head1 NAME
+
+  clipbored - continuously collects all selections in Xorg's clipboard buffers
+
+=head1 SYNOPSIS
+
+  clipbored [OPTIONS]
+
+=head1 DESCRIPTION
+
+B<clipbored> is a daemon that continuously grabs all non-duplicate selections
+in the X.org clipboard buffers and writes them to a plaintext history file for
+later use.
+
+There are several scripts distributed with clipbored that'll use the history
+file for different purposes.
+
+=head2 Scripts
+
+  dmenurl   - launch dmenu with all previously yanked URLs for you to select
+              from.
+
+  dmenuclip - launch dmenu listing all previously clipboarded content
+
+  fmenuclip - do the same thing but vertically
+
+=head1 OPTIONS
+
+  -n,   --no-daemon   do not detach from the shell
+  -k,   --kill        kill a running clipbored session
+  -h,   --help        show this help
+  -m,   --man         display the manual
+
+=head1 ENVIRONMENT
+
+The history file will be placed in $XDG_DATA_HOME/clipbored/clips
+
+=head1 AUTHOR
+
+Written by Magnus Woldrich.
+
+=head1 REPORTING BUGS
+
+Report bugs to trapd00r@trapd00r.se
+
+clipbored home page: <http://github.com/trapd00r/clipbored/>
+
+=head1 COPYRIGHT
+
+(C) Copyright 2010 Magnus Woldrich.
+
+License GPLv2: GNU GPL version 2
+
+=cut
