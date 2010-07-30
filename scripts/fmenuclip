@@ -7,7 +7,8 @@ use strict;
 my $xsels = "$ENV{XDG_DATA_HOME}/clipbored/clips";
 my $f     = '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
 #my $dmenu = 'fmenu -i -b -nb -l 7 \#1c1c1c -nf \#d7005f -sb \#252525';
-my $dmenu = 'dmenu -b -l 10'; #dmenu with vertical patch, or fmenu
+my $dmenu =
+  'fmenu -b -l 10 -nb \#030303 -nf \#ffffff -sb \#030303 -sf \#eb050e';
 
 my $xclipper = `which xclip` || `which xsel` || undef;
 chomp($xclipper);
