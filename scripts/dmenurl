@@ -2,27 +2,28 @@
 use strict;
 # dmenurl - pick and choose url's in the xsel file
 
-my $xsels = "$ENV{HOME}/.config/clipbored/clips";
-my $dmenu = 'fmenu -b -l 10';
-open(CLIPS, "<", $xsels) or die "Cant open $xsels for reading: $!";
-my @allClips = <CLIPS>;
-close CLIPS;
+my $xsels = "$ENV{XDG_DATA_HOME}/clipbored/clips";
+my $dmenu = 'dmenu -b -l 10';
+
+open(my $r_clips, '<', $xsels) or die("Cant open $xsels: $!");
+my @cliplist = <$r_clips>;
+close($r_clips);
 
 my @urls;
-foreach my $clip(@allClips) {
+foreach my $clip(@cliplist) {
   push(@urls, $clip) if $clip =~ /^(http:|www\.)/;
 }
-my $urlsToPrint = join('\n', reverse(@urls));
+my $urls_to_print = join('\n', reverse(@urls));
 
 my $xclipper = `which xclip` || `which xsel` || undef;
-die "No xsel or xclip in $ENV{PATH}" if !$xclipper;
 chomp($xclipper);
+die("No xsel or xclip in $ENV{PATH}") if(!defined($xclipper));
 
 if($xclipper =~ /xclip/) {
   $xclipper = "$xclipper -i -l 0|$xclipper -o";
 }
 else {
-    $xclipper = "$xclipper -i|$xclipper -o"; 
+    $xclipper = "$xclipper -i|$xclipper -o";
 }
 
-system("printf \"$urlsToPrint\"|$dmenu -p url|$xclipper");
+system("printf \"$urls_to_print\"|$dmenu -p url|$xclipper");
