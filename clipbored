@@ -3,11 +3,13 @@ use strict;
 use Data::Dumper;
 use Getopt::Long;
 use Pod::Usage;
+use File::Path 'make_path';
 
 my $xsel_log = "$ENV{XDG_DATA_HOME}/clipbored/clips";
 my $pidfile  = '/tmp/clipbored.pid';
 
 if(!-f $xsel_log) {
+  make_path("$ENV{XDG_DATA_HOME}/clipbored");
   open(my $fh, '>', $xsel_log) or die($!);
   close($fh);
 }
