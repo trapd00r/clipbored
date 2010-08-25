@@ -11,4 +11,8 @@ WriteMakefile(
     MIN_PERL_VERSION => 5.000,
 );
 
+MAN2PODS => {
+  'README.pod'    => 'blib/man1/clipbored.pod.1',
+}
+
 
