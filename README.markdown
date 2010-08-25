@@ -17,8 +17,7 @@ file for different purposes.
 
 ## Scripts
 
-  dmenurl   - launch dmenu with all previously yanked URLs for you to select
-              from.
+  dmenurl   - launch dmenu with all previously yanked URLs for you to select from.
 
   dmenuclip - launch dmenu listing all previously clipboarded content
 
