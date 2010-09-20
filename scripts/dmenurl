@@ -10,20 +10,20 @@ my @cliplist = <$r_clips>;
 close($r_clips);
 
 my @urls;
-foreach my $clip(@cliplist) {
-  push(@urls, $clip) if $clip =~ /^(http:|www\.)/;
+for my $clip(@cliplist) {
+  if($clip =~ m;(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?);) {
+    push(@urls, $1);
+  }
 }
 my $urls_to_print = join('\n', reverse(@urls));
 
-my $xclipper = `which xclip` || `which xsel` || undef;
-chomp($xclipper);
-die("No xsel or xclip in $ENV{PATH}") if(!defined($xclipper));
+chomp(my $xclip = `which xclip`);
 
-if($xclipper =~ /xclip/) {
-  $xclipper = "$xclipper -i -l 0|$xclipper -o";
-}
-else {
-    $xclipper = "$xclipper -i|$xclipper -o";
-}
+do {
+  print STDERR "No xclip found. Please install.\n";
+  exit(1);
+} if(!defined($xclip));
 
-system("printf \"$urls_to_print\"|$dmenu -p url|$xclipper");
+$xclip = "$xclip -i -l 0|$xclip -o";
+
+system("printf \"$urls_to_print\"|$dmenu -p url|$xclip");
