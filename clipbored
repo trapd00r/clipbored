@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 use strict;
-use Data::Dumper;
 use Getopt::Long;
 use Pod::Usage;
 use File::Path 'make_path';
@@ -18,6 +17,15 @@ our($opt_no_daemon) = undef;
 GetOptions(
  'no-daemon' => \$opt_no_daemon,
  'kill'      => \&killkid,
+ 'clear'     => sub {
+   if(-e $xsel_log) {
+     open (my $fh, '>', $xsel_log) or die("Could not open $xsel_log: $!");
+     close($fh);
+   }
+   print "$xsel_log cleared\n";
+   exit(0);
+   },
+ 'last:i'    => \&lastlog,
  'help'      => sub {pod2usage(-verbose => 1) and exit(0)},
  'man'       => sub {pod2usage(-verbose => 3) and exit(0)},
 );
@@ -28,6 +36,29 @@ if(-f $pidfile) {
 }
 
 sync_cb();
+
+sub lastlog {
+  shift;
+  my $wayback = shift // 25;
+  if($wayback < 1) {
+    $wayback = 25;
+  }
+  open(my $fh, '<', $xsel_log) or die("Could not open $xsel_log: $!");
+  my @records = <$fh>;
+  close($fh);
+
+  if(scalar(@records) < $wayback) {
+    $wayback = scalar(@records);
+  }
+
+  my $i = 0;
+  for(@records[0 .. $wayback-1]) {
+    printf("\e[1m%2d\e[0m %s", $i, $_);
+    $i++;
+  }
+  exit(0);
+}
+
 
 sub sync_cb {
   daemonize() unless(defined($opt_no_daemon));
@@ -125,6 +156,8 @@ file for different purposes.
 
 =head1 OPTIONS
 
+  -l,   --last        show the n latest additions
+  -c,   --clear       clear all history
   -n,   --no-daemon   do not detach from the shell
   -k,   --kill        kill a running clipbored session
   -h,   --help        show this help
