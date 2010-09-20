@@ -32,7 +32,7 @@ sync_cb();
 sub sync_cb {
   daemonize() unless(defined($opt_no_daemon));
   while(1) {
-    chomp(my $current_selection = `/usr/bin/xsel -o`);
+    chomp(my $current_selection = `/usr/bin/xclip -o`);
     if(defined($current_selection)) {
       open(my $r_xsel, '<', $xsel_log) or die("Cant open $xsel_log: $!");
       chomp(my @selections = <$r_xsel>);
