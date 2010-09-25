@@ -2,8 +2,32 @@
 use strict;
 # dmenurl - pick and choose url's in the xsel file
 
-my $xsels = "$ENV{XDG_DATA_HOME}/clipbored/clips";
-my $dmenu = 'dmenu -b -l 10';
+my $xsels     = "$ENV{XDG_DATA_HOME}/clipbored/clips";
+
+my $font      = (exists $ENV{CLIPBORED_DMENU_FONT})
+  ? $ENV{CLIPBORED_DMENU_FONT}
+  : '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
+my $normal_bg = (exists $ENV{CLIPBORED_DMENU_NORMAL_BG})
+  ? $ENV{CLIPBORED_DMENU_NORMAL_BG}
+  :  "#1c1c1c";
+my $normal_fg = (exists $ENV{CLIPBORED_DMENU_NORMAL_FG})
+  ? $ENV{CLIPBORED_DMENU_NORMAL_FG}
+  : "#ffffff";
+my $select_bg = (exists $ENV{CLIPBORED_DMENU_SELECT_BG})
+  ? $ENV{CLIPBORED_DMENU_SELECT_BG}
+  : "#484848";
+my $select_fg = (exists $ENV{CLIPBORED_DMENU_SELECT_FG})
+  ? $ENV{CLIPBORED_DMENU_SELECT_FG}
+  :  "#ffffff";
+
+$normal_bg =~ s/^(#)/\\$1/;
+$normal_fg =~ s/^(#)/\\$1/;
+$select_bg =~ s/^(#)/\\$1/;
+$select_fg =~ s/^(#)/\\$1/;
+
+my $dmenu =  "dmenu -i -b "
+  . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
+
 
 open(my $r_clips, '<', $xsels) or die("Cant open $xsels: $!");
 my @cliplist = <$r_clips>;
