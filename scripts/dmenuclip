@@ -2,9 +2,31 @@
 # dmenuclip - Really nasty dmenu launcher to be used in combination with
 # clipbored
 use strict;
-my $xsels = "$ENV{XDG_DATA_HOME}/clipbored/clips";
-my $f     = '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
-my $dmenu = 'dmenu -i -b -nb \#1c1c1c -nf \#d7005f -sb \#252525';
 
-# this rocks! :)
-system("printf \"\$(\\cat $xsels|$dmenu -fn $f -p xsel)\"|xclip -i -l 0|xclip -o");
+my $xsels     = "$ENV{XDG_DATA_HOME}/clipbored/clips";
+
+my $font      = (exists $ENV{CLIPBORED_DMENU_FONT})
+  ? $ENV{CLIPBORED_DMENU_FONT}
+  : '-*-fixed-*-*-*-*-15-*-*-*-*-*-*-*';
+my $normal_bg = (exists $ENV{CLIPBORED_DMENU_NORMAL_BG})
+  ? $ENV{CLIPBORED_DMENU_NORMAL_BG}
+  :  "#1c1c1c";
+my $normal_fg = (exists $ENV{CLIPBORED_DMENU_NORMAL_FG})
+  ? $ENV{CLIPBORED_DMENU_NORMAL_FG}
+  : "#ffffff";
+my $select_bg = (exists $ENV{CLIPBORED_DMENU_SELECT_BG})
+  ? $ENV{CLIPBORED_DMENU_SELECT_BG}
+  : "#484848";
+my $select_fg = (exists $ENV{CLIPBORED_DMENU_SELECT_FG})
+  ? $ENV{CLIPBORED_DMENU_SELECT_FG}
+  :  "#ffffff";
+
+$normal_bg =~ s/^(#)/\\$1/;
+$normal_fg =~ s/^(#)/\\$1/;
+$select_bg =~ s/^(#)/\\$1/;
+$select_fg =~ s/^(#)/\\$1/;
+
+my $dmenu =  "dmenu -i -b "
+  . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
+
+system("printf \"\$(\\cat $xsels|$dmenu  -fn $font -p dmenuclip)\"|xclip -i -l 0|xclip -o");
