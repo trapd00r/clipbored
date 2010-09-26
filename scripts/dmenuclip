@@ -29,4 +29,4 @@ $select_fg =~ s/^(#)/\\$1/;
 my $dmenu =  "dmenu -i -b "
   . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
 
-system("printf \"\$(\\cat $xsels|$dmenu  -fn $font -p dmenuclip)\"|xclip -i -l 0|xclip -o");
+system("printf \"\$(\\tac $xsels|$dmenu  -fn $font -p dmenuclip)\"|xclip -i -l 0|xclip -o");
