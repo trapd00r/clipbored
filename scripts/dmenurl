@@ -20,12 +20,33 @@ my $select_fg = (exists $ENV{CLIPBORED_DMENU_SELECT_FG})
   ? $ENV{CLIPBORED_DMENU_SELECT_FG}
   :  "#ffffff";
 
+
+my $list_mode = (exists $ENV{CLIPBORED_DMENU_LISTMODE})
+  ? dmenu_mode($ENV{CLIPBORED_DMENU_LISTMODE})
+  : dmenu_mode('vertical');
+
+# If defined, we want vertical mode
+if(exists($ENV{CLIPBORED_DMENU_LINES})) {
+  $list_mode = "-l $ENV{CLIPBORED_DMENU_LINES}";
+}
+
+sub dmenu_mode {
+  my $what = shift;
+
+  if($what eq 'vertical') {
+    return("-l 15");
+  }
+  else {
+    return("");
+  }
+}
+
 $normal_bg =~ s/^(#)/\\$1/;
 $normal_fg =~ s/^(#)/\\$1/;
 $select_bg =~ s/^(#)/\\$1/;
 $select_fg =~ s/^(#)/\\$1/;
 
-my $dmenu =  "dmenu -i -b "
+my $dmenu =  "dmenu -i -b $list_mode "
   . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
 
 
