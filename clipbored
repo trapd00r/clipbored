@@ -133,11 +133,11 @@ sub clip_location {
   # File::Path exports a make_path function that would allow us to emulate
   # mkdir -p behaviour. People running Perl < 5.10 didnt like that though.
   my $dir = undef;
-  if(!defined($ENV{XDG_CONFIG_HOME}) or(!-d $ENV{XDG_CONFIG_HOME})) {
-    $dir = "$ENV{HOME}/.config";
+  if(!defined($ENV{XDG_DATA_HOME}) or(!-d $ENV{XDG_DATA_HOME})) {
+    $dir = "$ENV{HOME}/.local";
   }
   else {
-    $dir = $ENV{XDG_CONFIG_HOME};
+    $dir = $ENV{XDG_DATA_HOME};
   }
   if(!-d $dir) {
     mkpath($dir);
