@@ -1,19 +1,15 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2';
+our $VERSION = '1.2.1';
 use strict;
 use Getopt::Long;
 use Pod::Usage;
-use File::Path 'make_path';
+#use File::Path 'make_path';
+use File::Path 'mkpath';
 
-my $xsel_log = "$ENV{XDG_DATA_HOME}/clipbored/clips";
+
+my $xsel_log = clip_location();
 my $pidfile  = '/tmp/clipbored.pid';
-
-if(!-f $xsel_log) {
-  make_path("$ENV{XDG_DATA_HOME}/clipbored");
-  open(my $fh, '>', $xsel_log) or die($!);
-  close($fh);
-}
 
 our($opt_no_daemon) = undef;
 GetOptions(
@@ -41,7 +37,9 @@ sync_cb();
 
 sub lastlog {
   shift;
-  my $wayback = shift // 25;
+  my $wayback = shift;
+  $wayback = 25 unless(defined($wayback));
+
   if($wayback < 1) {
     $wayback = 25;
   }
@@ -67,16 +65,19 @@ sub lastlog {
 sub sync_cb {
   daemonize() unless(defined($opt_no_daemon));
   while(1) {
+    my %selections = ();
     chomp(my $current_selection = `/usr/bin/xclip -o`);
     if(defined($current_selection)) {
       open(my $r_xsel, '<', $xsel_log) or die("Cant open $xsel_log: $!");
       chomp(my @selections = <$r_xsel>);
       close($r_xsel);
+
       $current_selection =~ s/\n/ /g; # newline hassle
 
-      if($current_selection ~~ @selections) {
-        # Duplicate
+      map { $selections{$_} = undef } @selections;
 
+      if(exists($selections{$current_selection})) {
+        # DUPE
       }
       else {
         open(my $a_xsel, '>>', $xsel_log) or die("Cant open $xsel_log: $!");
@@ -84,8 +85,6 @@ sub sync_cb {
         close($a_xsel);
         print $current_selection, "\n" if(defined($opt_no_daemon));
       }
-    }
-    else {
     }
     sleep 2;
   }
@@ -128,6 +127,30 @@ sub daemonize {
     open(STDERR, '>', '/dev/null');
     open(STDIN,  '<', '/dev/null');
   }
+}
+
+sub clip_location {
+  # File::Path exports a make_path function that would allow us to emulate
+  # mkdir -p behaviour. People running Perl < 5.10 didnt like that though.
+  my $dir = undef;
+  if(!defined($ENV{XDG_CONFIG_HOME}) or(!-d $ENV{XDG_CONFIG_HOME})) {
+    $dir = "$ENV{HOME}/.config";
+  }
+  else {
+    $dir = $ENV{XDG_CONFIG_HOME};
+  }
+  if(!-d $dir) {
+    mkpath($dir);
+  }
+  $dir .= "/clipbored";
+  if(-d $dir) {
+    mkpath($dir);
+  }
+  $dir .= '/clips';
+  print $dir;
+  open(my $fh, '>>', $dir) or die($!);
+  close($fh);
+  return($dir);
 }
 
 
