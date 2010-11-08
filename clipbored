@@ -143,7 +143,7 @@ sub clip_location {
     mkpath($dir);
   }
   $dir .= "/clipbored";
-  if(-d $dir) {
+  if(!-d $dir) {
     mkpath($dir);
   }
   $dir .= '/clips';
