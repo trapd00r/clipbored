@@ -147,7 +147,6 @@ sub clip_location {
     mkpath($dir);
   }
   $dir .= '/clips';
-  print $dir;
   open(my $fh, '>>', $dir) or die($!);
   close($fh);
   return($dir);
