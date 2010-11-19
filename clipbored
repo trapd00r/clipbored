@@ -194,6 +194,17 @@ file for different purposes.
 
 The history file will be placed in $XDG_DATA_HOME/clipbored/clips
 
+The helper scripts can read properties from environment variables.
+These are recognized:
+
+  CLIPBORED_DMENU_LISTMODE    regular/vertical
+  CLIPBORED_DMENU_NORMAL_FG   foreground color in HEX
+  CLIPBORED_DMENU_NORMAL_BG   background color in HEX
+  CLIPBORED_DMENU_SELECT_FG   selected item background color in HEX
+  CLIPBORED_DMENU_SELECT_BG   selected item foreground color in HEX
+  CLIPBORED_DMENU_FONT        font that will be used
+  CLIPBORED_DMENU_LINES       how many lines that will be shown in vertical mode
+
 =head1 AUTHOR
 
 Written by Magnus Woldrich.
