@@ -4,7 +4,7 @@
 # SYNOPSIS
       clipbored [OPTIONS]
 
-  ![dmenuclip screenshot](http://cloud.github.com/downloads/trapd00r/clipbored/dmenuclip-screenshot.png)
+  ![dmenuclip screenshot](http://p.japh.se/dmenuclip-screenshot.png)
 
 # DESCRIPTION
     clipbored is a daemon that continuously grabs all non-duplicate
