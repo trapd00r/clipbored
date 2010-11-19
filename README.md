@@ -1,10 +1,10 @@
 # NAME
       clipbored - continuously collects all selections in Xorg's clipboard buffers
 
+  ![dmenuclip screenshot](http://p.japh.se/dmenuclip-screenshot.png)
+
 # SYNOPSIS
       clipbored [OPTIONS]
-
-  ![dmenuclip screenshot](http://p.japh.se/dmenuclip-screenshot.png)
 
 # DESCRIPTION
     clipbored is a daemon that continuously grabs all non-duplicate
