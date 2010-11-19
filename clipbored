@@ -52,7 +52,7 @@ sub lastlog {
   }
 
   my $i = 0;
-  for(@records[0 .. $wayback-1]) {
+  for(@records[scalar(@records) - $wayback .. scalar(@records) - 1]) {
     printf("\e[1m%2d\e[0m %s", $i, $_);
     $i++;
   }
