@@ -71,4 +71,4 @@ do {
 
 $xclip = "$xclip -i -l 0|$xclip -o";
 
-system("printf \"$urls_to_print\"|$dmenu -p url|$xclip");
+system("printf '$urls_to_print'|$dmenu -p url|$xclip");
