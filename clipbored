@@ -1,17 +1,21 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2.1';
+our $VERSION = '1.2.2';
 use strict;
 use Getopt::Long;
 use Pod::Usage;
-#use File::Path 'make_path';
 use File::Path 'mkpath';
 
 
 my $xsel_log = clip_location();
 my $pidfile  = '/tmp/clipbored.pid';
 
-our($opt_no_daemon) = undef;
+my($opt_no_daemon, $opt_x_buffer) = (undef, lc($ENV{CLIPBORED_X_SELECTION}));
+if(!defined($opt_x_buffer)) {
+  $opt_x_buffer = 'primary';
+}
+
+my($opt_no_daemon) = undef;
 GetOptions(
  'no-daemon' => \$opt_no_daemon,
  'kill'      => \&killkid,
@@ -66,7 +70,7 @@ sub sync_cb {
   daemonize() unless(defined($opt_no_daemon));
   while(1) {
     my %selections = ();
-    chomp(my $current_selection = `/usr/bin/xclip -o`);
+    chomp(my $current_selection = `/usr/bin/xclip -o -selection $opt_x_buffer`);
     if(defined($current_selection)) {
       open(my $r_xsel, '<', $xsel_log) or die("Cant open $xsel_log: $!");
       chomp(my @selections = <$r_xsel>);
@@ -152,12 +156,13 @@ sub clip_location {
   return($dir);
 }
 
+__END__
 
 =pod
 
 =head1 NAME
 
-  clipbored - continuously collects all selections in Xorg's clipboard buffers
+clipbored - continuously collects all selections in Xorg's clipboard buffers
 
 =head1 SYNOPSIS
 
@@ -179,8 +184,6 @@ file for different purposes.
 
   dmenuclip - launch dmenu listing all previously clipboarded content
 
-  fmenuclip - do the same thing but vertically
-
 =head1 OPTIONS
 
   -l,   --last        show the n latest additions
@@ -192,7 +195,20 @@ file for different purposes.
 
 =head1 ENVIRONMENT
 
-The history file will be placed in $XDG_DATA_HOME/clipbored/clips
+The history file location is $XDG_DATA_HOME/clipbored/clips
+
+The X selection to use can be specified by setting the B<CLIPBORED_X_SELECTION>
+environment variable.
+
+If unset, or set to I<primary> , text is grabbed from the B<XA_PRIMARY> buffer.
+When text is selected with the mouse, or piped through xclip/xsel with zero
+arguments, it ends up here. This is most likely what you want.
+
+If set to I<clipboard>, text is grabbed from the B<XA_CLIPBOARD> buffer. Data
+ends up in this buffer when an explicit action is taken to cut/copy text; used
+in many GUI environments.
+
+To the best of my knowledge, the I<secondary> buffer is rarely used at all.
 
 The helper scripts can read properties from environment variables.
 These are recognized:
@@ -207,18 +223,40 @@ These are recognized:
 
 =head1 AUTHOR
 
-Written by Magnus Woldrich.
+    \ \ | / /
+     \ \ - /
+      \ | /
+      (O O)
+      ( < )
+      (-=-)
+
+  Magnus Woldrich
+  CPAN ID: WOLDRICH
+  magnus@trapd00r.se
+  http://japh.se
+
+=head1 CONTRIBUTORS
+
+Markus Xously suggested we should be able to pick the clipboard buffer to use.
+Since I very rarely use any GUI applications, I wasn't aware of the fact that
+when CTRL+C/CTRL+V etc is used, it goes into the XA_CLIPBOARD buffer instead of 
+the XA_PRIMARY, probably rendering clipbored somewhat useless to the users using
+these types of applications. :)
 
 =head1 REPORTING BUGS
 
-Report bugs to trapd00r@trapd00r.se
+Report bugs to L<trapd00r@trapd00r.se> or L<use the issue tracker|http://github.com/trapd00r/clipbored/issues>.
 
-clipbored home page: <http://github.com/trapd00r/clipbored/>
+clipbored home page: L<http://github.com/trapd00r/clipbored/>
 
 =head1 COPYRIGHT
 
-(C) Copyright 2010 Magnus Woldrich.
+Copyright 2010, 2011 the B<clipbored>s L</AUTHOR> and L</CONTRIBUTORS> as listed
+above.
 
-License GPLv2: GNU GPL version 2
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =cut
