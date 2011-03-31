@@ -1,0 +1,102 @@
+=pod
+
+=head1 NAME
+
+clipbored - continuously collects all selections in Xorg's clipboard buffers
+
+=head1 SYNOPSIS
+
+  clipbored [OPTIONS]
+
+=head1 DESCRIPTION
+
+B<clipbored> is a daemon that continuously grabs all non-duplicate selections
+in the X.org clipboard buffers and writes them to a plaintext history file for
+later use.
+
+There are several scripts distributed with clipbored that'll use the history
+file for different purposes.
+
+=head2 Scripts
+
+  dmenurl   - launch dmenu with all previously yanked URLs for you to select
+              from.
+
+  dmenuclip - launch dmenu listing all previously clipboarded content
+
+=head1 OPTIONS
+
+  -l,   --last        show the n latest additions
+  -c,   --clear       clear all history
+  -n,   --no-daemon   do not detach from the shell
+  -k,   --kill        kill a running clipbored session
+  -h,   --help        show this help
+  -m,   --man         display the manual
+
+=head1 ENVIRONMENT
+
+The history file location is $XDG_DATA_HOME/clipbored/clips
+
+The X selection to use can be specified by setting the B<CLIPBORED_X_SELECTION>
+environment variable.
+
+If unset, or set to I<primary> , text is grabbed from the B<XA_PRIMARY> buffer.
+When text is selected with the mouse, or piped through xclip/xsel with zero
+arguments, it ends up here. This is most likely what you want.
+
+If set to I<clipboard>, text is grabbed from the B<XA_CLIPBOARD> buffer. Data
+ends up in this buffer when an explicit action is taken to cut/copy text; used
+in many GUI environments.
+
+To the best of my knowledge, the I<secondary> buffer is rarely used at all.
+
+The helper scripts can read properties from environment variables.
+These are recognized:
+
+  CLIPBORED_DMENU_LISTMODE    regular/vertical
+  CLIPBORED_DMENU_NORMAL_FG   foreground color in HEX
+  CLIPBORED_DMENU_NORMAL_BG   background color in HEX
+  CLIPBORED_DMENU_SELECT_FG   selected item background color in HEX
+  CLIPBORED_DMENU_SELECT_BG   selected item foreground color in HEX
+  CLIPBORED_DMENU_FONT        font that will be used
+  CLIPBORED_DMENU_LINES       how many lines that will be shown in vertical mode
+
+=head1 AUTHOR
+
+    \ \ | / /
+     \ \ - /
+      \ | /
+      (O O)
+      ( < )
+      (-=-)
+
+  Magnus Woldrich
+  CPAN ID: WOLDRICH
+  magnus@trapd00r.se
+  http://japh.se
+
+=head1 CONTRIBUTORS
+
+Markus Weimar suggested we should be able to pick the clipboard buffer to use.
+Since I very rarely use any GUI applications, I wasn't aware of the fact that
+when CTRL+C/CTRL+V etc is used, it goes into the XA_CLIPBOARD buffer instead of 
+the XA_PRIMARY, probably rendering clipbored somewhat useless to the users using
+these types of applications. :)
+
+=head1 REPORTING BUGS
+
+Report bugs to L<trapd00r@trapd00r.se> or L<use the issue tracker|http://github.com/trapd00r/clipbored/issues>.
+
+clipbored home page: L<http://github.com/trapd00r/clipbored/>
+
+=head1 COPYRIGHT
+
+Copyright 2010, 2011 the B<clipbored>s L</AUTHOR> and L</CONTRIBUTORS> as listed
+above.
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+=cut
