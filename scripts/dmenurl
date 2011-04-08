@@ -20,6 +20,9 @@ my $select_fg = (exists $ENV{CLIPBORED_DMENU_SELECT_FG})
   ? $ENV{CLIPBORED_DMENU_SELECT_FG}
   :  "#ffffff";
 
+my $x_buffer = (exists $ENV{CLIPBORED_X_SELECTION})
+  ? $ENV{CLIPBORED_X_SELECTION}
+  : 'primary';
 
 my $list_mode = (exists $ENV{CLIPBORED_DMENU_LISTMODE})
   ? dmenu_mode($ENV{CLIPBORED_DMENU_LISTMODE})
@@ -69,6 +72,6 @@ do {
   exit(1);
 } if(!defined($xclip));
 
-$xclip = "$xclip -i -l 0|$xclip -o";
+$xclip = "$xclip -selection $x_buffer -i -l 0|$xclip -o";
 
 system("printf '$urls_to_print'|$dmenu -p url|$xclip");

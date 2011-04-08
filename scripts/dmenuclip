@@ -25,20 +25,18 @@ my $list_mode = (exists $ENV{CLIPBORED_DMENU_LISTMODE})
   ? dmenu_mode($ENV{CLIPBORED_DMENU_LISTMODE})
   : dmenu_mode('vertical');
 
+my $x_buffer = (exists $ENV{CLIPBORED_X_SELECTION})
+  ? $ENV{CLIPBORED_X_SELECTION}
+  : 'primary';
+
+
 # If defined, we want vertical mode
 if(exists($ENV{CLIPBORED_DMENU_LINES})) {
   $list_mode = "-l $ENV{CLIPBORED_DMENU_LINES}";
 }
 
 sub dmenu_mode {
-  my $what = shift;
-
-  if($what eq 'vertical') {
-    return("-l 15");
-  }
-  else {
-    return("");
-  }
+  return ($_[0] eq 'vertical') ? '-l 15' : '';
 }
 
 $normal_bg =~ s/^(#)/\\$1/;
@@ -46,7 +44,9 @@ $normal_fg =~ s/^(#)/\\$1/;
 $select_bg =~ s/^(#)/\\$1/;
 $select_fg =~ s/^(#)/\\$1/;
 
+
 my $dmenu =  "dmenu -i -b $list_mode "
   . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
 
-system("printf \"\$(\\tac $xsels|$dmenu  -fn $font -p dmenuclip)\"|xclip -i -l 0|xclip -o");
+my $dmenu_cmd = qq[\$(tac $xsels | $dmenu -fn $font -p dmenuclip)];
+system("printf $dmenu_cmd | xclip -selection $x_buffer -i -l 0 | xclip -o");

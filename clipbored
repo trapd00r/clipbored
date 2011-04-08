@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2.3';
+our $VERSION = '1.2.4';
 use strict;
 use Getopt::Long;
 use Pod::Usage;
@@ -220,6 +220,7 @@ These are recognized:
   CLIPBORED_DMENU_SELECT_BG   selected item foreground color in HEX
   CLIPBORED_DMENU_FONT        font that will be used
   CLIPBORED_DMENU_LINES       how many lines that will be shown in vertical mode
+  CLIPBORED_X_SELECTION       X buffer to use: primary, secondary, clipboard
 
 =head1 AUTHOR
 
