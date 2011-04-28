@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 use strict;
-# dmenurl - pick and choose url's in the xsel file
 
 my $xsels     = "$ENV{XDG_DATA_HOME}/clipbored/clips";
 
@@ -35,19 +34,10 @@ if(exists($ENV{CLIPBORED_DMENU_LINES})) {
 
 sub dmenu_mode {
   my $what = shift;
-
-  if($what eq 'vertical') {
-    return("-l 15");
-  }
-  else {
-    return("");
-  }
+  return ($what eq 'vertical') ? '-l 15' : '';
 }
 
-$normal_bg =~ s/^(#)/\\$1/;
-$normal_fg =~ s/^(#)/\\$1/;
-$select_bg =~ s/^(#)/\\$1/;
-$select_fg =~ s/^(#)/\\$1/;
+s/^(#)/\\$1/ for ($normal_fg, $normal_bg, $select_fg, $select_bg);
 
 my $dmenu =  "dmenu -i -b $list_mode "
   . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
@@ -59,7 +49,7 @@ close($r_clips);
 
 my @urls;
 for my $clip(@cliplist) {
-  if($clip =~ m;(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?);) {
+  if($clip =~ m{(https?://[-/.\w]+)}) {
     push(@urls, $1);
   }
 }
