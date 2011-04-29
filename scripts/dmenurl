@@ -39,8 +39,9 @@ sub dmenu_mode {
 
 s/^(#)/\\$1/ for ($normal_fg, $normal_bg, $select_fg, $select_bg);
 
-my $dmenu =  "dmenu -i -b $list_mode "
-  . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
+my $dmenu =  "dmenu -i -b $list_mode"
+  . " -nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg"
+  . " -fn $font";
 
 
 open(my $r_clips, '<', $xsels) or die("Cant open $xsels: $!");
