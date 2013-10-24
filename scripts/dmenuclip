@@ -4,6 +4,7 @@
 use strict;
 
 my $xsels     = "$ENV{XDG_DATA_HOME}/clipbored/clips";
+my $sortercmd = "/usr/local/bin/sorter";
 
 my $font      = (exists $ENV{CLIPBORED_DMENU_FONT})
   ? $ENV{CLIPBORED_DMENU_FONT}
@@ -49,4 +50,4 @@ my $dmenu =  "dmenu -i -b $list_mode "
   . "-nb $normal_bg -nf $normal_fg -sb $select_bg -sf $select_fg";
 
 my $dmenu_cmd = qq["\$(tac $xsels | $dmenu -fn $font -p dmenuclip)"];
-system("printf $dmenu_cmd | xclip -selection $x_buffer -i -l 0 | xclip -o");
+system("$sortercmd $xsels $dmenu_cmd | xclip -selection $x_buffer -i -l 0 | xclip -o");

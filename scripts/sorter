@@ -1,0 +1,17 @@
+#!/usr/bin/python
+
+## contributed by @godlike64
+## it takes the variable pattern and moves to the end of the file
+
+import sys
+filename = sys.argv[1]
+pattern = sys.argv[2]
+buffer = ""
+with open(filename, "r") as file_:
+    for line in file_:
+         if line.replace("\n", "") != pattern: 
+              buffer = buffer + line
+with open(filename, "w") as file_:
+    file_.write(buffer)
+    file_.write(pattern + "\n")
+print(pattern)

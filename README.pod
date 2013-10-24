@@ -24,6 +24,9 @@ file for different purposes.
 
   dmenuclip - launch dmenu listing all previously clipboarded content
 
+  sorter    - it moves the content to the end of the file after using, so you
+              will have the last clipboarded content in the top of dmenuclip
+
 =head1 OPTIONS
 
   -l,   --last        show the n latest additions
