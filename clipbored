@@ -63,7 +63,7 @@ sub lastlog {
     $i++;
   }
   #FIXME collected since DATE
-  printf "%s%s%s selections collected\n", $colors[1], scalar(@records), $colors[2];
+  printf("%s%s%s selections collected\n", $colors[1], scalar(@records), $colors[2]);
   exit(0);
 }
 
