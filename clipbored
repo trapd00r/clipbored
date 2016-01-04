@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2.4';
+our $VERSION = '1.2.5';
 use strict;
 use Getopt::Long;
 use Pod::Usage;
@@ -57,12 +57,13 @@ sub lastlog {
   }
 
   my $i = 0;
+  my @colors = -t STDOUT ? ("\e[1m", "\e[1m", "\e[0m") : ("", "", "");
   for(@records[scalar(@records) - $wayback .. scalar(@records) - 1]) {
-    printf("\e[1m%2d\e[0m %s", $i, $_);
+    printf("%s%2d%s %s", $colors[0], $i, $colors[2], $_);
     $i++;
   }
   #FIXME collected since DATE
-  print "\e[1m" . scalar(@records) . "\e[0m selections collected \n";
+  printf("%s%s%s selections collected\n", $colors[1], scalar(@records), $colors[2]);
   exit(0);
 }
 
