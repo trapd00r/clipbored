@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2.5';
+our $VERSION = '1.2.6';
 use strict;
 use Getopt::Long;
 use Pod::Usage;
@@ -236,7 +236,7 @@ These are recognized:
 
   Magnus Woldrich
   CPAN ID: WOLDRICH
-  magnus@trapd00r.se
+  m@japh.se
   http://japh.se
 
 =head1 CONTRIBUTORS
@@ -249,13 +249,13 @@ these types of applications. :)
 
 =head1 REPORTING BUGS
 
-Report bugs to L<trapd00r@trapd00r.se> or L<use the issue tracker|http://github.com/trapd00r/clipbored/issues>.
+Report bugs to L<m@japh.se> or L<use the issue tracker|http://github.com/trapd00r/clipbored/issues>.
 
 clipbored home page: L<http://github.com/trapd00r/clipbored/>
 
 =head1 COPYRIGHT
 
-Copyright 2010, 2011 the B<clipbored>s L</AUTHOR> and L</CONTRIBUTORS> as listed
+Copyright 2010, 2011, 2018- the B<clipbored>s L</AUTHOR> and L</CONTRIBUTORS> as listed
 above.
 
 =head1 LICENSE
