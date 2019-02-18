@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 our $APP     = 'clipbored';
-our $VERSION = '1.2.8';
+our $VERSION = '1.2.9';
 use strict;
 use Getopt::Long;
 use Pod::Usage;

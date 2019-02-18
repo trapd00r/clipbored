@@ -5,8 +5,10 @@ use ExtUtils::MakeMaker;
 WriteMakefile1(
   META_MERGE => {
     resources => {
-      repository => q{https://github.com/trapd00r/clipbored},
-      bugtracker => q{https://github.com/trapd00r/clipbored/issues},
+      type       => 'git',
+      url        => 'https://github.com/trapd00r/clipbored.git',
+      web        => 'https://github.com/trapd00r/clipbored',
+      bugtracker => 'https://github.com/trapd00r/clipbored/issues',
     },
   },
 
